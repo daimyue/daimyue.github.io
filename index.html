@@ -107,6 +107,7 @@
                 // 提交到金山文档表单
                 const response = await fetch(formUrl, {
                     method: 'POST',
+                    mode: 'no-cors',  // 添加此行
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
