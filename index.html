@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网格事件上报系统</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 600px; 
+            margin: 20px auto; 
+            padding: 20px; 
+            background-color: #f5f5f5;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group { 
+            margin-bottom: 15px; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            color: #333;
+            font-weight: bold;
+        }
+        input, textarea, select { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            font-size: 14px;
+        }
+        button { 
+            background: #1E6DEB; 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #1557b0;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2 style="text-align: center; color: #1E6DEB;">网格事件上报系统</h2>
+        <form id="eventForm">
+            <div class="form-group">
+                <label for="gridName">网格名称</label>
+                <select id="gridName" required>
+                    <option value="">请选择网格</option>
+                    <option value="镇级网格A">镇级网格A</option>
+                    <option value="管区网格B">管区网格B</option>
+                    <option value="村级网格C">村级网格C</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="eventTitle">事件标题</label>
+                <input type="text" id="eventTitle" placeholder="例如：道路积水" required>
+            </div>
+            <div class="form-group">
+                <label for="urgency">紧急程度</label>
+                <select id="urgency" required>
+                    <option value="">请选择</option>
+                    <option value="高">高</option>
+                    <option value="中">中</option>
+                    <option value="低">低</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description">现场描述</label>
+                <textarea id="description" rows="4" placeholder="请详细描述事件情况..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="reporter">上报人</label>
+                <input type="text" id="reporter" placeholder="请输入姓名" required>
+            </div>
+            <button type="submit">提交事件</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('eventForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const data = {
+                gridName: document.getElementById('gridName').value,
+                eventTitle: document.getElementById('eventTitle').value,
+                urgency: document.getElementById('urgency').value,
+                description: document.getElementById('description').value,
+                reporter: document.getElementById('reporter').value
+            };
+
+            // 替换为你的金山文档表单提交URL
+            const formUrl = 'https://kdocs.cn/l/ciHplpFVBexW'; 
+
+            try {
+                // 提交到金山文档表单
+                const response = await fetch(formUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(data).toString()
+                });
+
+                if (response.ok) {
+                    alert('✅ 提交成功！数据已同步到WPS表格');
+                    document.getElementById('eventForm').reset();
+                } else {
+                    alert('❌ 提交失败，请检查网络或联系管理员');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ 网络错误，请检查连接后重试');
+            }
+        });
+    </script>
+</body>
+</html>
